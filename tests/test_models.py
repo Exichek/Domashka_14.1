@@ -61,7 +61,7 @@ def test_category_count(products: list[Product]) -> None:
 
 def test_product_count(products: list[Product]) -> None:
     """Проверяет общий счетчик товаров."""
-    category1 = Category("Смартфоны", "Описание", products)
+    category = Category("Смартфоны", "Описание", products)
     assert Category.product_count == 2
 
     product3 = Product("Телевизор", "QLED 4K", 123000.0, 7)
@@ -69,7 +69,7 @@ def test_product_count(products: list[Product]) -> None:
     assert Category.product_count == 3
 
     product4 = Product("Планшет", "128GB", 50000.0, 4)
-    category1.add_product(product4)
+    category.add_product(product4)
     assert Category.product_count == 4
 
 
@@ -145,9 +145,7 @@ def test_price_setter_invalid(
     product.price = invalid_price
 
     assert product.price == 1000.0
-    assert capsys.readouterr().out == (
-        "Цена не должна быть " "нулевая или отрицательная\n"
-    )
+    assert capsys.readouterr().out == "Цена не должна быть нулевая или отрицательная\n"
 
 
 def test_price_is_private() -> None:
@@ -156,3 +154,40 @@ def test_price_is_private() -> None:
 
     with pytest.raises(AttributeError):
         getattr(product, "__price")
+
+
+def test_product_str() -> None:
+    """Проверяет строковое представление товара."""
+    product = Product("Телефон", "Описание", 100.0, 10)
+
+    assert str(product) == "Телефон, 100.0 руб. Остаток: 10 шт."
+
+
+def test_category_str(products: list[Product]) -> None:
+    """Проверяет суммарный остаток товаров в строке категории."""
+    category = Category("Смартфоны", "Описание", products)
+
+    assert str(category) == "Смартфоны, количество продуктов: 13 шт."
+
+
+def test_category_str_empty() -> None:
+    """Проверяет строковое представление пустой категории."""
+    category = Category("Пустая категория", "Описание", [])
+
+    assert str(category) == "Пустая категория, количество продуктов: 0 шт."
+
+
+def test_product_add() -> None:
+    """Проверяет сложение стоимости запасов двух товаров."""
+    product1 = Product("Телефон", "Описание", 100.0, 10)
+    product2 = Product("Планшет", "Описание", 200.0, 2)
+
+    assert product1 + product2 == 1400.0
+
+
+def test_product_add_wrong_type() -> None:
+    """Проверяет запрет сложения товара с другим типом."""
+    product = Product("Телефон", "Описание", 100.0, 10)
+
+    with pytest.raises(TypeError):
+        product + 10
