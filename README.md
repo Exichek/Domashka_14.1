@@ -158,8 +158,6 @@ poetry run black --check src tests main.py
 poetry run mypy src main.py
 ```
 
-Для согласования форматирования Black и Flake8 используется файл `.flake8` с максимальной длиной строки 88 символов.
-
 ## История домашних заданий
 
 - **14.1** — создание классов `Product` и `Category`.
