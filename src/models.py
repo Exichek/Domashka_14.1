@@ -41,6 +41,17 @@ class Product:
             quantity=product_data["quantity"],
         )
 
+    def __str__(self) -> str:
+        """Возвращает строковое представление товара."""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: "Product") -> float:
+        """Возвращает суммарную стоимость двух товаров на складе."""
+        if not isinstance(other, Product):
+            raise TypeError("Складывать можно только объекты Product")
+
+        return self.price * self.quantity + other.price * other.quantity
+
 
 class Category:
     """Класс для представления категории товаров."""
@@ -69,13 +80,10 @@ class Category:
 
     @property
     def products(self) -> str:
-        """Возвращает строку с информацией о товарах категории."""
-        result = ""
+        """Возвращает строку со всеми товарами категории."""
+        return "".join(f"{product}\n" for product in self.__products)
 
-        for product in self.__products:
-            result += (
-                f"{product.name}, {product.price} руб. "
-                f"Остаток: {product.quantity} шт.\n"
-            )
-
-        return result
+    def __str__(self) -> str:
+        """Возвращает название категории и общий остаток товаров."""
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
