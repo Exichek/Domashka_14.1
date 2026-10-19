@@ -23,3 +23,6 @@ dev = [
     "mypy (>=2.4.0,<3.0.0)",
     "black (>=26.10.0,<27.0.0)"
 ]
+
+[tool.isort]
+profile = "black"
