@@ -142,6 +142,9 @@ def test_price_setter_invalid(
     """Проверяет запрет нулевой и отрицательной цены."""
     product = Product("Телефон", "Описание", 1000.0, 5)
 
+    # Очищаем вывод миксина после создания объекта.
+    capsys.readouterr()
+
     product.price = invalid_price
 
     assert product.price == 1000.0
